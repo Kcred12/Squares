@@ -18,20 +18,13 @@ public class Player {
         return rect;
     }
 
-    // Movement methods
-    public void moveUp() {
-        rect.setY(rect.getY() - speed);
+    public double getSpeed() {
+        return speed;
     }
 
-    public void moveDown() {
-        rect.setY(rect.getY() + speed);
-    }
-
-    public void moveLeft() {
-        rect.setX(rect.getX() - speed);
-    }
-
-    public void moveRight() {
-        rect.setX(rect.getX() + speed);
-    }
+    // Movement method
+    public void move(double dx, double dy) {
+        rect.setX(rect.getX() + dx);
+        rect.setY(rect.getY() + dy);
+}
 }
