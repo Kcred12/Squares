@@ -24,7 +24,20 @@ public class Player {
 
     // Movement method
     public void move(double dx, double dy) {
-        rect.setX(rect.getX() + dx);
-        rect.setY(rect.getY() + dy);
+        double newX = rect.getX() + dx;
+        double newY = rect.getY() + dy;
+
+        double paneWidth = rect.getParent().getBoundsInLocal().getWidth();
+        double paneHeight = rect.getParent().getBoundsInLocal().getHeight();
+
+        // Ensure the player stays within bounds
+        if (newX < 0) newX = 0;
+        if (newX + rect.getWidth() > paneWidth) newX = paneWidth - rect.getWidth();
+
+        if (newY < 0) newY = 0;
+        if (newY + rect.getHeight() > paneHeight) newY = paneHeight - rect.getHeight();
+
+        rect.setX(newX);
+        rect.setY(newY);
 }
 }

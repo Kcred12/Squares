@@ -13,12 +13,15 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
+
     private Set<KeyCode> pressedKeys = new HashSet<>();
 
     @Override
     public void start(Stage primaryStage) {
         Pane root = new Pane();
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, WIDTH, HEIGHT);
 
 
         Player player = new Player(50, 50, 30, 30, 300);
@@ -58,7 +61,6 @@ public class Main extends Application {
                     dy /= length;
                 }
 
-                // Check what movement keys are being held down
                 player.move(dx * distance, dy * distance);
             }
         };
