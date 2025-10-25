@@ -1,16 +1,15 @@
 package com.squares;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.animation.AnimationTimer;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class Main extends Application {
 
