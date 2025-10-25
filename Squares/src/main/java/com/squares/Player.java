@@ -22,9 +22,18 @@ public class Player {
         return speed;
     }
 
-    // Movement method
-    public void move(double dx, double dy) {
-        rect.setX(rect.getX() + dx);
-        rect.setY(rect.getY() + dy);
-}
+    // Movement method with window boundary collision
+    public void move(double dx, double dy, double sceneWidth, double sceneHeight) {
+        double newX = rect.getX() + dx;
+        double newY = rect.getY() + dy;
+
+        // Keep player inside window boundaries
+        if (newX < 0) newX = 0;
+        if (newY < 0) newY = 0;
+        if (newX + rect.getWidth() > sceneWidth) newX = sceneWidth - rect.getWidth();
+        if (newY + rect.getHeight() > sceneHeight) newY = sceneHeight - rect.getHeight();
+
+        rect.setX(newX);
+        rect.setY(newY);
+    }
 }
