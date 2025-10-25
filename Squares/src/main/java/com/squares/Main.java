@@ -1,6 +1,8 @@
 package com.squares;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javafx.animation.AnimationTimer;
@@ -15,18 +17,36 @@ public class Main extends Application {
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
+    private static final int PLAYER_SIZE = 30;
+    private static final int SAFEZONE_SIZE = 150;
 
     private Set<KeyCode> pressedKeys = new HashSet<>();
+    private List<Enemy> enemies = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) {
         Pane root = new Pane();
         Scene scene = new Scene(root, WIDTH, HEIGHT);
 
+        // Create the safe zone
+        Rectangle safeZone = new Rectangle((WIDTH / 2 - SAFEZONE_SIZE / 2), (HEIGHT / 2 - SAFEZONE_SIZE / 2), 150, 150);
+        safeZone.setStyle("-fx-fill: lightgreen; -fx-opacity: 0.5;");
+        root.getChildren().add(safeZone);
 
-        Player player = new Player(50, 50, 30, 30, 300);
-        Rectangle r = player.getRect();
-        root.getChildren().add(r);
+        // Create an enemy(ies) outside the safe zone
+        // Enemy enemy = new Enemy(safeZone, WIDTH, HEIGHT);
+        // root.getChildren().add(enemy.getBody());
+        for (int i = 0; i < 10000; i++) {
+            Enemy enemy = new Enemy(safeZone, WIDTH, HEIGHT);
+            enemies.add(enemy);
+            root.getChildren().add(enemy.getBody());
+        }
+
+        // Create the player
+        Player player = new Player((WIDTH / 2 - PLAYER_SIZE / 2), (HEIGHT / 2 - PLAYER_SIZE / 2), PLAYER_SIZE, PLAYER_SIZE, 450);
+        Rectangle playerHitbox = player.getRect();
+        root.getChildren().add(playerHitbox);
+
 
         // Add a key to pressedKeys when it is pressed
         scene.setOnKeyPressed(event -> pressedKeys.add(event.getCode()));
@@ -70,6 +90,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("My First JavaFX Window");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
