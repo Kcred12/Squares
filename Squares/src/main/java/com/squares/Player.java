@@ -10,8 +10,15 @@ public class Player {
 
     public Player(double x, double y, double width, double height, double speed) {
         rect = new Rectangle(x, y, width, height);
-        rect.setFill(Color.BLUE);
+        rect.setFill(Color.web("#00E5FF"));
+        rect.setStroke(Color.web("#FF00C8"));
+        rect.setStrokeWidth(2);
+
         this.speed = speed;
+    }
+
+    public void setStyles() {
+        
     }
 
     public Rectangle getRect() {

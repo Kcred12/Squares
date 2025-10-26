@@ -10,6 +10,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -26,18 +28,22 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Pane root = new Pane();
+        root.setStyle("-fx-background-color: linear-gradient(to bottom, #0A0014, #25003A);");
+
         Scene scene = new Scene(root, WIDTH, HEIGHT);
+
+        addScrollingBackground(root);
 
         // Create the safe zone
         Rectangle safeZone = new Rectangle((WIDTH / 2 - SAFEZONE_SIZE / 2), (HEIGHT / 2 - SAFEZONE_SIZE / 2), 150, 150);
-        safeZone.setStyle("-fx-fill: lightgreen; -fx-opacity: 0.5;");
+        safeZone.setFill(Color.web("#04D9FF", 0));
         root.getChildren().add(safeZone);
 
         // Create an enemy(ies) outside the safe zone
         // Enemy enemy = new Enemy(safeZone, WIDTH, HEIGHT);
         // root.getChildren().add(enemy.getBody());
         for (int i = 0; i < 15; i++) {
-            Enemy enemy = new Enemy(safeZone, WIDTH, HEIGHT, 300);
+            Enemy enemy = new Enemy(safeZone, WIDTH, HEIGHT, 200);
             enemies.add(enemy);
             root.getChildren().add(enemy.getRect());
         }
@@ -82,7 +88,7 @@ public class Main extends Application {
                 }
 
                 for ( Enemy enemy : enemies) {
-                    enemy.update(deltaSeconds);
+                    enemy.update(deltaSeconds, WIDTH, HEIGHT);
                 }
 
                 player.move(dx * distance, dy * distance);
@@ -92,10 +98,51 @@ public class Main extends Application {
         gameLoop.start();
 
 
-        primaryStage.setTitle("My First JavaFX Window");
+        primaryStage.setTitle("Squares");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    public void addScrollingBackground(Pane root) {
+
+        int gridSpacing = 50;
+        List<Line> gridLines = new ArrayList<>();
+
+        // Create vertical lines
+        for (int i = 0; i <= WIDTH; i += gridSpacing) {
+            Line line = new Line(i, -gridSpacing, i, HEIGHT);
+            line.setStroke(Color.web("#00F0FF", 0.2));
+            root.getChildren().add(line);
+            gridLines.add(line);
+        }
+
+        // Create horizontal lines
+        for (int i = 0; i <= HEIGHT; i += gridSpacing) {
+            Line line = new Line(0, i, WIDTH, i);
+            line.setStroke(Color.web("#00F0FF", 0.2));
+            root.getChildren().add(line);
+            gridLines.add(line);
+        }
+
+        // Animate
+        AnimationTimer gridTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                for (Line line : gridLines) {
+                    // Move the line
+                    line.setTranslateY(line.getTranslateY() + 1);
+
+                    // Wrap around smoothly
+                    if (line.getTranslateY() > gridSpacing) { 
+                        line.setTranslateY(line.getTranslateY() - gridSpacing);
+                    }
+                }
+            }
+        };
+        gridTimer.start();
+
+
     }
 
     public static void main(String[] args) {

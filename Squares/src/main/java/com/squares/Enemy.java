@@ -16,6 +16,9 @@ public class Enemy {
     public Enemy(Rectangle safeZone, int windowWidth, int windowHeight, double speed) {
         rect = new Rectangle(SIZE, SIZE, Color.RED);
         placeOutsideSafeZone(safeZone, windowWidth, windowHeight);
+        rect.setFill(Color.web("#FF007C"));
+        rect.setStroke(Color.web("#FF00C8"));
+        rect.setStrokeWidth(2); 
         this.speed = speed;
         initRandomVelocity();
     }
@@ -55,24 +58,36 @@ public class Enemy {
         return speed;
     }
 
-    public void update(double deltaTime) {
-        double newX = rect.getX() + vx * deltaTime;
-        double newY = rect.getY() + vy * deltaTime;
+    public void update(double dt, double sceneWidth, double sceneHeight) {
+            double newX = rect.getX() + vx * dt;
+            double newY = rect.getY() + vy * dt;
 
-        double paneWidth = rect.getParent().getBoundsInLocal().getWidth();
-        double paneHeight = rect.getParent().getBoundsInLocal().getHeight();
+            if (newX + rect.getWidth() > sceneWidth) {
+                double overflow = newX + rect.getWidth() - sceneWidth;  // how far past the wall
+                newX = sceneWidth - rect.getWidth() - overflow;        // reflect inside
+                vx *= -1;                                              // reverse velocity
+            }
 
-        // Bounce off the walls
-        if (newX < 0 || newX + SIZE > paneWidth) {
-            vx = -vx;
-            newX = rect.getX() + vx * deltaTime; // Recalculate position after bounce
+            if (newX < 0) {
+                double overflow = -newX;        // how far past the wall
+                newX = 0 + overflow;            // reflect inside
+                vx *= -1;                        // reverse velocity
+            }
+
+            if (newY + rect.getHeight() > sceneHeight) {
+                double overflow = newY + rect.getHeight() - sceneHeight;
+                newY = sceneHeight - rect.getHeight() - overflow;
+                vy *= -1;
+            }
+
+            if (newY < 0) {
+                double overflow = -newY;
+                newY = 0 + overflow;
+                vy *= -1;
+            }
+
+            rect.setX(newX);
+            rect.setY(newY);
         }
-        if (newY < 0 || newY + SIZE > paneHeight) {
-            vy = -vy;
-            newY = rect.getY() + vy * deltaTime; // Recalculate position after bounce
-        }
 
-        rect.setX(newX);
-        rect.setY(newY);
-    }
 }
