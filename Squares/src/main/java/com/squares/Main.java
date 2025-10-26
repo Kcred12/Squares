@@ -36,10 +36,10 @@ public class Main extends Application {
         // Create an enemy(ies) outside the safe zone
         // Enemy enemy = new Enemy(safeZone, WIDTH, HEIGHT);
         // root.getChildren().add(enemy.getBody());
-        for (int i = 0; i < 10000; i++) {
-            Enemy enemy = new Enemy(safeZone, WIDTH, HEIGHT);
+        for (int i = 0; i < 15; i++) {
+            Enemy enemy = new Enemy(safeZone, WIDTH, HEIGHT, 300);
             enemies.add(enemy);
-            root.getChildren().add(enemy.getBody());
+            root.getChildren().add(enemy.getRect());
         }
 
         // Create the player
@@ -79,6 +79,10 @@ public class Main extends Application {
                 if (length != 0) {
                     dx /= length;
                     dy /= length;
+                }
+
+                for ( Enemy enemy : enemies) {
+                    enemy.update(deltaSeconds);
                 }
 
                 player.move(dx * distance, dy * distance);

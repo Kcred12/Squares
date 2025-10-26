@@ -39,5 +39,5 @@ public class Player {
 
         rect.setX(newX);
         rect.setY(newY);
-}
+    }
 }
